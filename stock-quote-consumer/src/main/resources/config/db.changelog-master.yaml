@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: config/changelog/001-create-stock-table.yaml

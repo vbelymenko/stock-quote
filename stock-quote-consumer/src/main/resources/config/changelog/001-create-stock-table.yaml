@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001
+      author: vbelymenko
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            sequenceExists:
+              sequenceName: STOCK_SEQ
+      changes:
+        dbms: postgres
+        endDelimiter: \nGO
+        splitStatements: false
+        sql: CREATE SEQUENCE STOCK_SEQ
+              START WITH 1
+              INCREMENT BY 1
+              MINVALUE 1
+              MAXVALUE 9223372036854775807
+              CACHE 1;
+
+  - changeSet:
+      id: 002
+      author: vbelymenko
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: STOCK
+      changes:
+        dbms: postgres
+        endDelimiter: \nGO
+        splitStatements: false
+        sql: CREATE TABLE STOCK(
+          STOCK_SERIAL_NUMBER BIGINT,
+          SYMBOL VARCHAR(20),
+          EXCHANGE VARCHAR(20),
+          CURRENCY VARCHAR(20),
+          TRADE_VALUE VARCHAR(20),
+          TRADE_TIME VARCHAR(20),
+          CONSTRAINT "STOCK_PK" PRIMARY KEY (STOCK_SERIAL_NUMBER));

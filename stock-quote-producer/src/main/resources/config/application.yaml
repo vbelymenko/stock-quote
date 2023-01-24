@@ -1,0 +1,20 @@
+KAFKA_HOSTNAME: localhost
+SCHEMA_REGISTRY_HOSTNAME: localhost
+
+server:
+  port: 8083
+stockQuote:
+  producer:
+    # Mimic the stock exchange create a random stock quote every configured milliseconds
+    rateInMs: 500
+spring:
+  application:
+    name: "stock-quote-producer"
+  kafka:
+    properties:
+      auto.register.schemas: true
+      schema.registry.url: http://${SCHEMA_REGISTRY_HOSTNAME}:8081
+    producer:
+      bootstrap-servers: ${KAFKA_HOSTNAME}:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer

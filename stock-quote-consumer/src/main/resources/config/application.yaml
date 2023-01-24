@@ -1,0 +1,48 @@
+DB_USERNAME: root
+DB_PASSWORD: root
+DB_SCHEMA: test_db
+DB_HOSTNAME: localhost
+KAFKA_HOSTNAME: localhost
+SCHEMA_REGISTRY_HOSTNAME: localhost
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: "stock-quote-consumer"
+  liquibase:
+    enabled: true
+    change-log: classpath:config/db.changelog-master.yaml
+  datasource:
+    url: jdbc:postgresql://${DB_HOSTNAME}:5432/${DB_SCHEMA}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        generate_statistics: true
+        order_inserts: true
+        jdbc:
+          batch_size: 10
+  kafka:
+    # To support batch processing
+    listener:
+      type: batch
+    consumer:
+      bootstrap-servers: ${KAFKA_HOSTNAME}:9092
+      client-id: ${spring.application.name}
+      group-id: ${spring.application.name}-group
+      auto-offset-reset: earliest
+      max-poll-records: 10
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    properties:
+      auto.register.schemas: false
+      schema.registry.url: http://${SCHEMA_REGISTRY_HOSTNAME}:8081
+      specific.avro.reader: true
+
+logging.level.org.hibernate.SQL.type.descriptor.sql: trace
+logging.level.org.hibernate.orm.jdbc.bind: trace
