@@ -15,6 +15,6 @@ spring:
       auto.register.schemas: true
       schema.registry.url: http://${SCHEMA_REGISTRY_HOSTNAME}:8081
     producer:
-      bootstrap-servers: ${KAFKA_HOSTNAME}:9092
+      bootstrap-servers: ${KAFKA_HOSTNAME}:29092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
